@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
+from math import log2
 
 from distributions import weight
 from distributions import competence
@@ -23,47 +25,52 @@ def calculate_subsets(N: int, K: int, perceptions: np.ndarray) -> np.ndarray:
   return np.ma.masked_array(perceptions, mask=perceptions_mask)
 
 def main():
-  N = 5
-  K = 2
+  trials_per_K = 100
+  N = 1000 # keep as a multiple of 100
+  K = np.linspace(1, N, num=100, dtype=int)
 
+  results = np.zeros((len(K), trials_per_K))
+
+  for i, k in enumerate(K):
+    for j in range(trials_per_K):
+      print(f'{i*trials_per_K + j}', end=" ", flush=True)
+      results[i, j] = trial(N, k)
+
+  results = results.sum(axis=1) / trials_per_K
+
+  plt.plot(K, results)
+  plt.title("Results")
+  plt.xlabel("K")
+  plt.ylabel("Correct Outcomes / Total Outcomes")
+  plt.savefig("results.png")
+
+
+
+def trial(N: int, K: int) -> int:
+  """
+  Returns 1 if the correct alternative wins, 0 otherwise.
+  """
   dist_weight = weight.exponential
   dist_competence = competence.normal
   dist_perception = perception.uniform
   dist_split = split.even
 
   weights = dist_weight(N, K)
-  print(weights)
-  print()
   competences = dist_competence(N, K, weights)
-  print(competences)
-  print()
-
   perceptions = dist_perception(N, K, weights, competences)
-  print(perceptions)
-  print()
-
   subsets = calculate_subsets(N, K, perceptions)
-  print(subsets)
-  print()
-
   delegations = dist_split(N, K, weights, competences, perceptions, subsets)
-  print(delegations)
-  print()
 
   correct_vote_share = 0
   flags = np.random.rand(N)
   for vote, comp, flag in zip(delegations, competences, flags):
     if (flag > comp):
       correct_vote_share += vote
-  
-  print(correct_vote_share)
-  print()
 
   if correct_vote_share >= 0.5:
-    print("Correct Alternative Wins!")
+    return 1.0
   else:
-    print("Incorrect Alternative Wins :(")
-    
+    return 0.0
 
 
 
@@ -71,4 +78,4 @@ def main():
 
 main()
 
-# W = weight.exponential(1000,0.7)
+

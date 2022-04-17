@@ -12,10 +12,6 @@ import numpy as np
 #     delegations: (np.ndarray) A size N array where entry i is the voting share of agent i after delegation. Each entry should be in the interval [0,1]. The sum of the entries should be 1.
 
 def even(N: int, K: int, weights: np.ndarray, competences: np.ndarray, perceptions: np.ndarray, subsets: np.ndarray) -> np.ndarray:
-  print(subsets.sum(axis=1))
-  print()
   delegations = subsets / subsets.sum(axis=1).reshape((N,1))
   delegations *= weights.reshape((N,1))
-  print(delegations)
-  print()
   return delegations.sum(axis=1).data
