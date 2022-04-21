@@ -15,7 +15,7 @@ def uniform(N: int, K: int, weights: np.ndarray, competences: np.ndarray) -> np.
 
 #perception drawn from normal distribution with mean = true competence and variance is a function of your own competence. The more competent you are, the more 
 #likely you are to accurately guess the competence of others
-def normalCompetence(N: int, K: int, weights: np.ndarray, competences: np.ndarray) -> np.ndarray:
+def normalPerception(N: int, K: int, weights: np.ndarray, competences: np.ndarray) -> np.ndarray:
   NORNALIZATION = 0.5 
   completePerceptions = []
   for agentC in competences:
@@ -25,5 +25,41 @@ def normalCompetence(N: int, K: int, weights: np.ndarray, competences: np.ndarra
         perceptions.append(np.random.normal(agentC,voterC * NORNALIZATION))
       else:
         perceptions.append(agentC) #if you are guessing about yourself, guess true competence
-     completePerceptions.append(perceptions)
-        
+      completePerceptions.append(perceptions)
+    return completePerceptions
+    
+#perception as true competence
+def truePerception(N: int, K: int, weights: np.ndarray, competences: np.ndarray) -> np.ndarray:
+    completePerceptions = []  
+    for agent in competences:
+      completePerceptions.append(competences)
+    return completePerceptions
+  
+  
+#perception as a function of personal knowledge about other voters
+def knowledgePerception(N: int, K: int, weights: np.ndarray, competences: np.ndarray) -> np.ndarray:
+  NORNALIZATION = 0.7 
+  THRESHOLD = 0.2
+  
+  completePerceptions = []
+  for agent in competenes:   
+    knowledgeVec = []
+    for voter in competences:
+      if voter != agent: #not yourself
+        probKnown = np.random.uniform(0,1)
+        if probKnown >= THRESHOLD:
+          #if you know them --> get tru competence
+          knowledgeVec.append(voter) 
+        else:
+          #else normal distribution with high variance
+          knowledgeVec.append(np.random.normal(agentC,voterC * NORNALIZATION)) 
+      else:
+        #else it was yourself so get true competence
+        knowledgeVec.append(voter) 
+      completePerceptions.append(knowledgeVec)
+    return completePerceptions
+ 
+  
+    
+  
+
