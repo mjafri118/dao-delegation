@@ -11,3 +11,47 @@ import numpy as np
 
 def uniform(N: int, K: int, weights: np.ndarray, competences: np.ndarray) -> np.ndarray:
   return np.random.default_rng().uniform(low=0.0, high=1.0, size=(N,N))
+
+def normalPerception(N: int, K: int, weights: np.ndarray, competences: np.ndarray) -> np.ndarray:
+  NORNALIZATION = 0.5 
+  completePerceptions = []
+  for agentC in competences:
+    perceptions = []
+    for voterC in competences:
+      if (agentC != voterC):
+        perceptions.append(np.random.normal(agentC,voterC * NORNALIZATION))
+      else:
+        perceptions.append(agentC) #if you are guessing about yourself, guess true competence
+      completePerceptions.append(perceptions)
+    return completePerceptions
+    
+#perception as true competence
+def truePerception(N: int, K: int, weights: np.ndarray, competences: np.ndarray) -> np.ndarray:
+    completePerceptions = []  
+    for agent in competences:
+      completePerceptions.append(competences)
+    return completePerceptions
+  
+  
+#perception as a function of personal knowledge about other voters
+def knowledgePerception(N: int, K: int, weights: np.ndarray, competences: np.ndarray) -> np.ndarray:
+  NORNALIZATION = 0.7 
+  THRESHOLD = 0.2
+  
+  completePerceptions = []
+  for agent in competences:
+    knowledgeVec = []
+    for voter in competences:
+      if voter != agent: #not yourself
+        probKnown = np.random.uniform(0,1)
+        if probKnown >= THRESHOLD:
+          #if you know them --> get tru competence
+          knowledgeVec.append(voter)
+        else:
+          #else normal distribution with high variance
+          knowledgeVec.append(np.random.normal(agent,voter * NORNALIZATION)) 
+      else:
+        #else it was yourself so get true competence
+        knowledgeVec.append(voter) 
+      completePerceptions.append(knowledgeVec)
+    return completePerceptions
