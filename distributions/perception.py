@@ -11,3 +11,19 @@ import numpy as np
 
 def uniform(N: int, K: int, weights: np.ndarray, competences: np.ndarray) -> np.ndarray:
   return np.random.default_rng().uniform(low=0.0, high=1.0, size=(N,N))
+
+
+#perception drawn from normal distribution with mean = true competence and variance is a function of your own competence. The more competent you are, the more 
+#likely you are to accurately guess the competence of others
+def normalCompetence(N: int, K: int, weights: np.ndarray, competences: np.ndarray) -> np.ndarray:
+  NORNALIZATION = 0.5 
+  completePerceptions = []
+  for agentC in competences:
+    perceptions = []
+    for voterC in competences:
+      if (agent != voter):
+        perceptions.append(np.random.normal(agentC,voterC * NORNALIZATION))
+      else:
+        perceptions.append(agentC) #if you are guessing about yourself, guess true competence
+     completePerceptions.append(perceptions)
+        
