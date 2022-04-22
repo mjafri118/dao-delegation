@@ -55,3 +55,13 @@ def knowledgePerception(N: int, K: int, weights: np.ndarray, competences: np.nda
         knowledgeVec.append(voter) 
       completePerceptions.append(knowledgeVec)
     return completePerceptions
+
+def competence_favor_neighbors(N: int, K: int, weights: np.ndarray, competences: np.ndarray) -> np.ndarray:
+    perceptions = [[0 for a in range(N)] for b in range(N)]   
+    for i in range(0, N):
+        for j in range(0, N):
+            if i == j:
+                perceptions[i][j] = competences[i]
+            else:
+                perceptions[i][j] = max(competences[j] + np.random.uniform(-0.2, 0.2), 1) - np.abs(weights[i] - weights[j]) / 2
+    return perceptions
