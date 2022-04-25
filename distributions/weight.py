@@ -5,9 +5,9 @@ from utils import softmax
 # Functions in this file should adhere to the following pattern:
 #   Input:
 #     N: (int) The number of agents.
-#     K: (int) The subset size.
+#     K: (int) The global delegation limit.
 #   Output:
-#     weights: (np.ndarray) A size N array of weights. Each entry should be in the interval [0,1]. The sum of the entries should be 1.
+#     weights: (np.ndarray) A size N array where entry i is the voting share of agent i. Each entry should be in the interval [0,1]. The sum of the entries should be 1.
 
 # Outputs vote shares in an exponential distribution
 def exponential(N: int, K: int) -> np.ndarray:
