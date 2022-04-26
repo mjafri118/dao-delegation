@@ -11,7 +11,7 @@ import scipy.stats as stats
 
 def normal(N: int, K: int, weights: np.ndarray) -> np.ndarray:
   mu, sigma, lower, upper = 0.5, 0.1, 0, 1
-  return np.array(stats.truncnorm((lower - mu) / sigma, (upper - mu) / sigma, loc=mu, scale=sigma).rvs((N,N)))
+  return np.array(stats.truncnorm((lower - mu) / sigma, (upper - mu) / sigma, loc=mu, scale=sigma).rvs(N))
 
 def weighted(N: int, K: int, weights: np.ndarray) -> np.ndarray:
   competences = np.zeros(N)
