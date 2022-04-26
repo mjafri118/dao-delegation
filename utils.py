@@ -5,7 +5,7 @@ def softmax(x: np.ndarray)-> np.ndarray:
   e_x = np.exp(x - np.max(x, axis=0))
   return e_x / e_x.sum(axis=0)
 
-def is_path(graph: list, u: int, v: int, checked: np.ndarray) -> bool:
+def is_path(graph, u, v, checked):
   checked[u] = 1
   for child in graph[u]:
     if checked[child] == 1:
@@ -16,7 +16,7 @@ def is_path(graph: list, u: int, v: int, checked: np.ndarray) -> bool:
       return True
   return False
 
-def calculate_neighbors(N: int, K: int, weights: np.ndarray, competences: np.ndarray, perceptions: np.ndarray, limits: np.ndarray) -> tuple[list[list], list[list]]:
+def calculate_neighbors(N, K, weights, competences, perceptions, limits):
   """
   Input:
     N: (int) The number of agents.
@@ -48,7 +48,7 @@ def calculate_neighbors(N: int, K: int, weights: np.ndarray, competences: np.nda
           break
   return in_neighbors, out_neighbors
 
-def calculate_delegations(N: int, K: int, weights: np.ndarray, competences: np.ndarray, perceptions: np.ndarray, limits: np.ndarray, in_neighbors: list[list], out_neighbors: list[list], splits: list[list]) -> np.ndarray:
+def calculate_delegations(N, K, weights, competences, perceptions, limits, in_neighbors, out_neighbors, splits):
   """
   Input:
     N: (int) The number of agents.

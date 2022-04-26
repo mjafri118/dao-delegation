@@ -37,7 +37,7 @@ def main():
   plt.savefig("results-uniform.png")
 
 
-def trial(N: int, K: int) -> int:
+def trial(N, K):
   """
   Returns 1 if the correct alternative wins, 0 otherwise.
   """

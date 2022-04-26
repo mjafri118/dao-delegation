@@ -9,18 +9,18 @@ import scipy.stats as stats
 #   Output:
 #     competences: (np.ndarray) A size N array where entry i is the true competence of agent i. Each entry should be in the interval [0,1].
 
-def normal(N: int, K: int, weights: np.ndarray) -> np.ndarray:
+def normal(N, K, weights):
   mu, sigma, lower, upper = 0.5, 0.1, 0, 1
   return np.array(stats.truncnorm((lower - mu) / sigma, (upper - mu) / sigma, loc=mu, scale=sigma).rvs(N))
 
-def weighted(N: int, K: int, weights: np.ndarray) -> np.ndarray:
+def weighted(N, K, weights):
   competences = np.zeros(N)
   for i in range(N):
     competences[i] = weights[i] / np.sum(weights)
   competences = competences / (np.max(competences)) / 2
   return competences
   
-def tiered(N: int, K: int, weights: np.ndarray) -> np.ndarray:
+def tiered(N, K, weights):
   competences = np.zeros(N)
   one_q = np.quantile(weights, 0.25)
   two_q = np.quantile(weights, 0.5)

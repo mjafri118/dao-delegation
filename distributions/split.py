@@ -13,7 +13,7 @@ import numpy as np
 #   Output:
 #     splits: (list[list]) A size N list that corresponds to out_neighbors but with delegation shares instead of agent indices.
 
-def even(N: int, K: int, weights: np.ndarray, competences: np.ndarray, perceptions: np.ndarray, limits: np.ndarray, in_neighbors: list[list], out_neighbors: list[list]) -> list[list]:
+def even(N, K, weights, competences, perceptions, limits, in_neighbors, out_neighbors):
   splits = [[] for _ in range(N)]
   for agent, agent_out_neighbors in enumerate(out_neighbors):
     for neighbor in agent_out_neighbors:

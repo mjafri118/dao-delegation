@@ -10,8 +10,8 @@ import numpy as np
 #   Output:
 #     limits: (np.ndarray) A size N array where entry i is the maximum number of out neighbors for agent i. Each entry should be an integer in the set {1,2,...,K}.
 
-def uniform(N: int, K: int, weights: np.ndarray, competences: np.ndarray, perceptions: np.ndarray) -> np.ndarray:
+def uniform(N, K, weights, competences, perceptions):
   return np.random.default_rng().integers(1, K, N, endpoint=True)
 
-def best(N: int, K: int, weights: np.ndarray, competences: np.ndarray, perceptions: np.ndarray) -> np.ndarray:
+def best(N, K, weights, competences, perceptions):
   return np.ones(N)
