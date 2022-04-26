@@ -1,4 +1,5 @@
 import numpy as np
+import scipy.stats as stats
 
 # Functions in this file should adhere to the following pattern:
 #   Input:
@@ -9,13 +10,8 @@ import numpy as np
 #     competences: (np.ndarray) A size N array where entry i is the true competence of agent i. Each entry should be in the interval [0,1].
 
 def normal(N: int, K: int, weights: np.ndarray) -> np.ndarray:
-  competences = np.zeros(N)
-  for i in range(N):
-    while True:
-      competences[i] = np.random.default_rng().normal(loc=0.5, scale=0.15, size=1).item()
-      if (competences[i] >= 0 and competences[i] <= 1):
-        break
-  return competences
+  mu, sigma, lower, upper = 0.5, 0.1, 0, 1
+  return np.array(stats.truncnorm((lower - mu) / sigma, (upper - mu) / sigma, loc=mu, scale=sigma).rvs((N,N)))
 
 def weighted(N: int, K: int, weights: np.ndarray) -> np.ndarray:
   competences = np.zeros(N)

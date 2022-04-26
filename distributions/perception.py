@@ -1,4 +1,6 @@
 import numpy as np
+import scipy.stats as stats
+import matplotlib.pyplot as plt
 
 # Functions in this file should adhere to the following pattern:
 #   Input:
@@ -12,24 +14,21 @@ import numpy as np
 def uniform(N: int, K: int, weights: np.ndarray, competences: np.ndarray) -> np.ndarray:
   return np.random.default_rng().uniform(low=0.0, high=1.0, size=(N,N))
 
-def normalPerception(N: int, K: int, weights: np.ndarray, competences: np.ndarray) -> np.ndarray:
-  NORNALIZATION = 0.5 
-  completePerceptions = []
-  for agentC in competences:
-    perceptions = []
-    for voterC in competences:
-      if (agentC != voterC):
-        perceptions.append(np.random.normal(agentC,voterC * NORNALIZATION))
-      else:
-        perceptions.append(agentC) #if you are guessing about yourself, guess true competence
-      completePerceptions.append(perceptions)
-    return completePerceptions
+def normal(N: int, K: int, weights: np.ndarray, competences: np.ndarray) -> np.ndarray:
+  mu, sigma, lower, upper = 0.5, 0.1, 0, 1
+  return np.array(stats.truncnorm((lower - mu) / sigma, (upper - mu) / sigma, loc=mu, scale=sigma).rvs((N,N)))
     
 #perception as true competence
 def true(N: int, K: int, weights: np.ndarray, competences: np.ndarray) -> np.ndarray:
   perceptions = np.zeros((N,N))
   for agent in range(N):
     perceptions[agent] = competences
+  return perceptions
+
+def reverse(N: int, K: int, weights: np.ndarray, competences: np.ndarray) -> np.ndarray:
+  perceptions = np.zeros((N,N))
+  for agent in range(N):
+    perceptions[agent] = 1 - competences
   return perceptions
   
 #perception as a function of personal knowledge about other voters
@@ -53,14 +52,14 @@ def knowledgePerception(N: int, K: int, weights: np.ndarray, competences: np.nda
         #else it was yourself so get true competence
         knowledgeVec.append(voter) 
       completePerceptions.append(knowledgeVec)
-    return completePerceptions
+    return np.array(completePerceptions)
 
 def competence_favor_neighbors(N: int, K: int, weights: np.ndarray, competences: np.ndarray) -> np.ndarray:
-    perceptions = [[0 for a in range(N)] for b in range(N)]   
-    for i in range(0, N):
-        for j in range(0, N):
+    perceptions = np.zeros((N,N))   
+    for i in range(N):
+        for j in range(N):
             if i == j:
-                perceptions[i][j] = competences[i]
+                perceptions[i,j] = competences[i]
             else:
-                perceptions[i][j] = max(competences[j] + np.random.uniform(-0.2, 0.2), 1) - np.abs(weights[i] - weights[j]) / 2
+                perceptions[i,j] = max(competences[j] + np.random.uniform(-0.2, 0.2), 1) - np.abs(weights[i] - weights[j]) / 2
     return perceptions

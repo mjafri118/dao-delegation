@@ -16,3 +16,6 @@ def exponential(N: int, K: int) -> np.ndarray:
   """
   beta: float = 0.7
   return softmax(np.random.default_rng().exponential(beta, N))
+
+def even(N: int, K: int) -> np.ndarray:
+  return np.ones(N, dtype=float) / N

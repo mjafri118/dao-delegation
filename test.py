@@ -1,5 +1,5 @@
 import numpy as np
-
+import itertools as it
 
 A = np.array([
   [2,1],

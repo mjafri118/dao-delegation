@@ -13,9 +13,9 @@ from utils import calculate_neighbors, calculate_delegations
 np.set_printoptions(precision=2)
 
 def main():
-  num_agents = 10
-  num_limits = 5
-  trials_per_limit = 100000
+  num_agents = 51
+  num_limits = 10
+  trials_per_limit = 100
   limit_list = np.arange(1, num_agents, num_agents / num_limits, dtype=int)
 
   results = np.zeros((len(limit_list), trials_per_limit))
@@ -25,13 +25,16 @@ def main():
       print(f'{i * trials_per_limit + j}', end=" ", flush=True)
       results[i, j] = trial(num_agents, limit)
 
-  results = results.sum(axis=1) / trials_per_limit
+  results_variance = np.var(results, axis=1)
+  results_mean = np.mean(results, axis=1)
 
-  plt.plot(limit_list, results)
-  plt.title("Results")
+  plt.plot(limit_list, results_mean, label="mean")
+  plt.plot(limit_list, results_variance, label="variance")
+  plt.title("Uniform Perception Results")
   plt.xlabel("K")
-  plt.ylabel("Correct Outcomes / Total Outcomes")
-  plt.savefig("results.png")
+  plt.ylabel("")
+  plt.legend()
+  plt.savefig("results-uniform.png")
 
 
 def trial(N: int, K: int) -> int:
