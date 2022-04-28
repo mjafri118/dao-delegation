@@ -25,7 +25,7 @@ def true(N, K, weights, competences):
     perceptions[agent] = competences
   return perceptions
 
-def reverse(N, K, weights, competences):
+def inverse(N, K, weights, competences):
   perceptions = np.zeros((N,N))
   for agent in range(N):
     perceptions[agent] = 1 - competences

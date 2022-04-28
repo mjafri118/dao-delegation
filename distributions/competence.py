@@ -10,7 +10,7 @@ import scipy.stats as stats
 #     competences: (np.ndarray) A size N array where entry i is the true competence of agent i. Each entry should be in the interval [0,1].
 
 def normal(N, K, weights):
-  mu, sigma, lower, upper = 0.5, 0.1, 0, 1
+  mu, sigma, lower, upper = 0.6, 0.1, 0, 1
   return np.array(stats.truncnorm((lower - mu) / sigma, (upper - mu) / sigma, loc=mu, scale=sigma).rvs(N))
 
 def weighted(N, K, weights):

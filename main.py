@@ -1,7 +1,4 @@
-import matplotlib.pyplot as plt
 import numpy as np
-import matplotlib.pyplot as plt
-from math import log2
 
 from distributions import weight
 from distributions import competence
@@ -13,28 +10,24 @@ from utils import calculate_neighbors, calculate_delegations
 np.set_printoptions(precision=2)
 
 def main():
-  num_agents = 51
-  num_limits = 10
-  trials_per_limit = 100
-  limit_list = np.arange(1, num_agents, num_agents / num_limits, dtype=int)
+  num_agents = 50
+  trials_per_limit = 1000
+  limit_list = np.arange(1, num_agents+1, dtype=int)
 
-  results = np.zeros((len(limit_list), trials_per_limit))
+  binary_results = np.zeros((len(limit_list), trials_per_limit), dtype=int)
+  accuracy_results = np.zeros((len(limit_list), trials_per_limit))
+  concentration_results = np.zeros((len(limit_list), trials_per_limit))
 
   for i, limit in enumerate(limit_list):
     for j in range(trials_per_limit):
       print(f'{i * trials_per_limit + j}', end=" ", flush=True)
-      results[i, j] = trial(num_agents, limit)
-
-  results_variance = np.var(results, axis=1)
-  results_mean = np.mean(results, axis=1)
-
-  plt.plot(limit_list, results_mean, label="mean")
-  plt.plot(limit_list, results_variance, label="variance")
-  plt.title("Uniform Perception Results")
-  plt.xlabel("K")
-  plt.ylabel("")
-  plt.legend()
-  plt.savefig("results-uniform.png")
+      binary_results[i, j], accuracy_results[i,j], concentration_results[i,j] = trial(num_agents, limit)
+  print()
+  
+  prefix = "25ennuw"
+  np.savetxt(f'results/{prefix}-binary.dat', binary_results, delimiter=",", fmt="%d")
+  np.savetxt(f'results/{prefix}-accuracy.dat', accuracy_results, delimiter=",", fmt="%.4f")
+  np.savetxt(f'results/{prefix}-concentration.dat', concentration_results, delimiter=",", fmt="%.4f")
 
 
 def trial(N, K):
@@ -43,9 +36,9 @@ def trial(N, K):
   """
   dist_weight = weight.exponential
   dist_competence = competence.normal
-  dist_perception = perception.uniform
+  dist_perception = perception.normal
   dist_limit = limit.uniform
-  dist_split = split.even
+  dist_split = split.weighted
 
   weights = dist_weight(N, K)
   competences = dist_competence(N, K, weights)
@@ -63,9 +56,9 @@ def trial(N, K):
     if (flag < comp):
       correct_vote_share += vote
 
-  if correct_vote_share >= 0.5:
-    return 1.0
+  if correct_vote_share >= 0.25:
+    return 1, correct_vote_share, delegations.max()
   else:
-    return 0.0
+    return 0, correct_vote_share, delegations.max()
 
 main()
