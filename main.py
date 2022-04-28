@@ -24,7 +24,7 @@ def main():
       binary_results[i, j], accuracy_results[i,j], concentration_results[i,j] = trial(num_agents, limit)
   print()
   
-  prefix = "25ennuw"
+  prefix = "ennuw"
   np.savetxt(f'results/{prefix}-binary.dat', binary_results, delimiter=",", fmt="%d")
   np.savetxt(f'results/{prefix}-accuracy.dat', accuracy_results, delimiter=",", fmt="%.4f")
   np.savetxt(f'results/{prefix}-concentration.dat', concentration_results, delimiter=",", fmt="%.4f")
@@ -56,7 +56,7 @@ def trial(N, K):
     if (flag < comp):
       correct_vote_share += vote
 
-  if correct_vote_share >= 0.25:
+  if correct_vote_share >= 0.50:
     return 1, correct_vote_share, delegations.max()
   else:
     return 0, correct_vote_share, delegations.max()
